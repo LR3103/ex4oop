@@ -57,6 +57,32 @@ public abstract class BaseExpression implements Expression {
     }
 
     /**
+     * Provides a hook for specific simplification logic within concrete expression classes.
+     * This method is part of the Template Method pattern for simplification.
+     * Subclasses should override this to apply their specific simplification rules.
+     *
+     * @param left The simplified left sub-expression (for binary expressions).
+     * @param right The simplified right sub-expression (for binary expressions).
+     * @return A simplified expression if a rule applies, otherwise null.
+     */
+    public Expression simplifierLogic(Expression left, Expression right){
+        return null;
+    }
+
+    /**
+     * Provides a hook for specific simplification logic within concrete expression classes.
+     * This method is part of the Template Method pattern for simplification.
+     * Subclasses should override this to apply their specific simplification rules.
+     *
+     * @param expression The simplified sub-expression (for unary expressions).
+     * @return A simplified expression if a rule applies, otherwise null.
+     */
+    public Expression simplifierLogic(Expression expression){
+        return null;
+    }
+
+
+    /**
      * Default implementation for applying a NOT operation to this expression.
      * By default, most expressions are simply wrapped in a new Not gate.
      * This method is designed to be overridden by the Not class itself for double negation simplification.

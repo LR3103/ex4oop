@@ -83,36 +83,22 @@ public class Nand extends BinaryExpression {
      * @return A simplified version of the NAND expression.
      */
     @Override
-    public Expression simplify() {
-        // Step 1: Simplify children first
-        Expression simLeft = this.getLeft().simplify();
-        Expression simRight = this.getRight().simplify();
-
-        // Step 2: No variables -> evaluate to its result
-        if (simLeft.getVariables().isEmpty() && simRight.getVariables().isEmpty()) {
-            try {
-                // Evaluates purely constant expressions (e.g., T A F -> T)
-                return new Val(new Nand(simLeft, simRight).evaluate());
-            } catch (Exception ex) {
-                // Do nothing, let it fall through
-            }
-        }
-
+    public Expression simplifierLogic(Expression left, Expression right) {
         // Step 3: x A x = ~(x)
-        if (simLeft.toString().equals(simRight.toString())) {
-            return new Not(simLeft).simplify(); // Add .simplify() here!
+        if (left.toString().equals(right.toString())) {
+            return new Not(left).simplify(); // Add .simplify() here!
         }
 
         // Step 4: x A T = ~(x)
-        if (isTrue(simLeft)) return new Not(simRight).simplify(); // And here!
-        if (isTrue(simRight)) return new Not(simLeft).simplify(); // And here!
+        if (isTrue(left)) return new Not(right).simplify(); // And here!
+        if (isTrue(right)) return new Not(left).simplify(); // And here!
 
         // Step 4.5: x A F = T (and commutative)
         // If ANY side is False, an And would be False, so a Nand is ALWAYS True
-        if (isFalse(simLeft)) return new Val(true);
-        if (isFalse(simRight)) return new Val(true);
+        if (isFalse(left)) return new Val(true);
+        if (isFalse(right)) return new Val(true);
 
         // Step 5: Fallback if no rules apply
-        return new Nand(simLeft, simRight);
+        return null;
     }
 }

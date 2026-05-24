@@ -90,23 +90,11 @@ public class Not extends UnaryExpression {
      * @return A simplified version of the NOT expression.
      */
     @Override
-    public Expression simplify() {
-        // Step 1: Simplify the single child first
-        Expression simChild = this.getExpression().simplify();
-
-        // Step 2: No variables -> evaluate to its result
-        if (simChild.getVariables().isEmpty()) {
-            try {
-                return new Val(new Not(simChild).evaluate());
-            } catch (Exception ex) {
-                // Do nothing, let it fall through
-            }
-        }
-
+    public Expression simplifierLogic(Expression expression) {
         // Step 3 & 4: Polymorphism!
         // We don't check if simChild is a Not gate. We just TELL it to negate itself.
         // If it's a Var/And/Or, it returns new Not(simChild).
         // If it is ALREADY a Not gate, it cancels out and returns its inner child!
-        return simChild.assignNot();
+        return expression.assignNot();
     }
 }

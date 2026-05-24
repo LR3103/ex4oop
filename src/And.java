@@ -88,36 +88,21 @@ public class And extends BinaryExpression {
      * @return A simplified version of the AND expression.
      */
     @Override
-    public Expression simplify() {
-        // Step 1: Simplify children
-        Expression simLeft = this.getLeft().simplify();
-        Expression simRight = this.getRight().simplify();
-
-        // Step 2: No variables -> evaluate to its result
-        if (simLeft.getVariables().isEmpty() && simRight.getVariables().isEmpty()) {
-            try {
-                // Java compiler forces us to try-catch this, even though we know
-                // it won't fail because there are no variables.
-                return new Val(new And(simLeft, simRight).evaluate());
-            } catch (Exception ex) {
-                // Do nothing, just let it fall through to Step 5
-            }
-        }
-
+    public Expression simplifierLogic(Expression left, Expression right) {
         // Step 3: x & x = x
-        if (simLeft.toString().equals(simRight.toString())) {
-            return simLeft;
+        if (left.toString().equals(right.toString())) {
+            return left;
         }
 
         // Step 4: x & T = x (and commutative)
-        if (isTrue(simLeft)) return simRight;
-        if (isTrue(simRight)) return simLeft;
+        if (isTrue(left)) return right;
+        if (isTrue(right)) return left;
 
         // Step 4.5: x & F = F (and commutative)
-        if (isFalse(simLeft)) return new Val(false);
-        if (isFalse(simRight)) return new Val(false);
+        if (isFalse(left)) return new Val(false);
+        if (isFalse(right)) return new Val(false);
 
         // Step 5: Fallback
-        return new And(simLeft, simRight);
+        return null;
     }
 }

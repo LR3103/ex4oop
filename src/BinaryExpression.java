@@ -92,6 +92,20 @@ public abstract class BinaryExpression extends BaseExpression{
     }
 
     /**
+     * Applies specific simplification logic for the binary expression.
+     * This method is part of the Template Method pattern for simplification.
+     * Subclasses should override this to apply their specific simplification rules.
+     *
+     * @param left The simplified left sub-expression.
+     * @param right The simplified right sub-expression.
+     * @return A simplified expression if a rule applies, otherwise null.
+     */
+    @Override
+    public Expression simplifierLogic(Expression left, Expression right){
+        return null;
+    }
+
+    /**
      * Returns a string representation of the binary expression.
      * The format is typically "(left_expression SIGN right_expression)".
      * @return A string representing the binary expression.
@@ -99,6 +113,31 @@ public abstract class BinaryExpression extends BaseExpression{
     @Override
     public String toString() {
         return "(" + this.left.toString() + " " + this.getLogicalSign() + " " + this.right.toString() + ")";
+    }
+
+    /**
+     * Simplifies the current binary expression based on logical identities.
+     * This method uses the Template Method pattern, delegating specific simplification
+     * rules to the `simplifierLogic` method in concrete subclasses.
+     *
+     * @return A simplified version of the binary expression.
+     */
+    @Override
+    public Expression simplify() {
+        // Step 1: Simplify children first
+        Expression simLeft = this.getLeft().simplify();
+        Expression simRight = this.getRight().simplify();
+        // Step 2: No variables -> evaluate to its result
+        if (simLeft.getVariables().isEmpty() && simRight.getVariables().isEmpty()) {
+            try {
+                // Evaluates purely constant expressions (e.g., T ^ T -> F)
+                return new Val(reconstruct(simLeft, simRight).evaluate());
+            } catch (Exception ex) {
+                // Do nothing, let it fall through to Step 5
+            }
+        }
+        Expression simplifiedExpression = this.simplifierLogic(simLeft, simRight);
+        return (simplifiedExpression != null) ? simplifiedExpression : reconstruct(simLeft, simRight);
     }
 
     /**

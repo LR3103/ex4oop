@@ -78,6 +78,43 @@ public abstract class UnaryExpression extends BaseExpression {
     protected abstract Expression reconstruct(Expression expression);
 
     /**
+     * Applies specific simplification logic for the unary expression.
+     * This method is part of the Template Method pattern for simplification.
+     * Subclasses should override this to apply their specific simplification rules.
+     *
+     * @param expression The simplified sub-expression.
+     * @return A simplified expression if a rule applies, otherwise null.
+     */
+    @Override
+    public Expression simplifierLogic(Expression expression){
+        return null;
+    }
+
+    /**
+     * Simplifies the current unary expression based on logical identities.
+     * This method uses the Template Method pattern, delegating specific simplification
+     * rules to the `simplifierLogic` method in concrete subclasses.
+     *
+     * @return A simplified version of the unary expression.
+     */
+    @Override
+    public Expression simplify() {
+        // Step 1: Simplify the single child first
+        Expression simChild = this.getExpression().simplify();
+        // Step 2: No variables -> evaluate to its result
+        if (simChild.getVariables().isEmpty()) {
+            try {
+                return new Val(reconstruct(simChild).evaluate());
+            } catch (Exception ex) {
+                // Do nothing, let it fall through
+            }
+        }
+        Expression simplified = this.simplifierLogic(simChild);
+        return (simplified != null) ? simplified : reconstruct(simChild);
+    }
+
+
+    /**
      * Returns a new expression in which all occurrences of the specified variable
      * in the inner expression are replaced with the provided expression.
      * @param var The name of the variable to replace.

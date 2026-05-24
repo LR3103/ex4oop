@@ -97,38 +97,29 @@ public class Xor extends BinaryExpression {
      * @return A simplified version of the XOR expression.
      */
     @Override
-    public Expression simplify() {
-        // Step 1: Simplify children first
-        Expression simLeft = this.getLeft().simplify();
-        Expression simRight = this.getRight().simplify();
-
-        // Step 2: No variables -> evaluate to its result
-        if (simLeft.getVariables().isEmpty() && simRight.getVariables().isEmpty()) {
-            try {
-                // Evaluates purely constant expressions (e.g., T ^ T -> F)
-                return new Val(new Xor(simLeft, simRight).evaluate());
-            } catch (Exception ex) {
-                // Do nothing, let it fall through to Step 5
-            }
-        }
-
+    public Expression simplifierLogic(Expression left, Expression right){
         // Step 3: x ^ x = F
         // If the two sides are identical, Xor always returns False
-        if (simLeft.toString().equals(simRight.toString())) {
+        if (left.toString().equals(right.toString())) {
             return new Val(false);
         }
 
         // Step 4: x ^ T = ~(x) (and commutative)
         // If one side is True, return the NOT of the other side
-        if (isTrue(simLeft)) return new Not(simRight);
-        if (isTrue(simRight)) return new Not(simLeft);
+        if (isTrue(left)) return new Not(right);
+        if (isTrue(right)) return new Not(left);
 
         // Step 4.5: x ^ F = x (and commutative)
         // If one side is False, just return the other side exactly as is
-        if (isFalse(simLeft)) return simRight;
-        if (isFalse(simRight)) return simLeft;
+        if (isFalse(left)) return right;
+        if (isFalse(right)) return left;
 
-        // Step 5: Fallback if no rules apply
-        return new Xor(simLeft, simRight);
+        //fallback logic super methods returns the exact same method
+        return null;
     }
+
+
+
+
+
 }

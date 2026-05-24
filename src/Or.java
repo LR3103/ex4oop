@@ -78,44 +78,32 @@ public class Or extends BinaryExpression {
     }
 
     /**
-     * Simplifies the current OR expression based on logical identities.
+     * Applies specific simplification rules for the OR expression.
+     * This method is part of the Template Method pattern for simplification.
      * Simplification rules include:
-     * - If both sub-expressions are constants, evaluate to a constant.
      * - x | x = x
      * - x | T = T
      * - x | F = x
-     * @return A simplified version of the OR expression.
+     * @param left The simplified left sub-expression.
+     * @param right The simplified right sub-expression.
+     * @return A simplified expression if a rule applies, otherwise null.
      */
     @Override
-    public Expression simplify() {
-        // Step 1: Simplify children first
-        Expression simLeft = this.getLeft().simplify();
-        Expression simRight = this.getRight().simplify();
-
-        // Step 2: No variables -> evaluate to its result
-        if (simLeft.getVariables().isEmpty() && simRight.getVariables().isEmpty()) {
-            try {
-                // Evaluates purely constant expressions (e.g., T | F -> T)
-                return new Val(new Or(simLeft, simRight).evaluate());
-            } catch (Exception ex) {
-                // Do nothing, let it fall through to Step 5
-            }
-        }
-
+    public Expression simplifierLogic(Expression left, Expression right) {
         // Step 3: x | x = x
-        if (simLeft.toString().equals(simRight.toString())) {
-            return simLeft;
+        if (left.toString().equals(right.toString())) {
+            return left;
         }
 
         // Step 4: x | T = T (and commutative)
-        if (isTrue(simLeft)) return new Val(true);
-        if (isTrue(simRight)) return new Val(true);
+        if (isTrue(left)) return new Val(true);
+        if (isTrue(right)) return new Val(true);
 
         // Step 4.5: x | F = x (and commutative)
-        if (isFalse(simLeft)) return simRight;
-        if (isFalse(simRight)) return simLeft;
+        if (isFalse(left)) return right;
+        if (isFalse(right)) return left;
 
         // Step 5: Fallback if no rules apply
-        return new Or(simLeft, simRight);
+        return null;
     }
 }

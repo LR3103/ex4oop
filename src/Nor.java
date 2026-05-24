@@ -87,38 +87,24 @@ public class Nor extends BinaryExpression {
      * @return A simplified version of the NOR expression.
      */
     @Override
-    public Expression simplify() {
-        // Step 1: Simplify children first
-        Expression simLeft = this.getLeft().simplify();
-        Expression simRight = this.getRight().simplify();
-
-        // Step 2: No variables -> evaluate to its result
-        if (simLeft.getVariables().isEmpty() && simRight.getVariables().isEmpty()) {
-            try {
-                // Evaluates purely constant expressions (e.g., T V F -> F)
-                return new Val(new Nor(simLeft, simRight).evaluate());
-            } catch (Exception ex) {
-                // Do nothing, let it fall through
-            }
-        }
-
+    public Expression simplifierLogic(Expression left, Expression right) {
         // Step 3: x V x = ~(x)
         // If the two sides are identical, Nor returns the NOT of that side
-        if (simLeft.toString().equals(simRight.toString())) {
-            return new Not(simLeft);
+        if (left.toString().equals(right.toString())) {
+            return new Not(left);
         }
 
         // Step 4: x V T = F (and commutative)
         // If ANY side is True, an Or would be True, so a Nor is ALWAYS False
-        if (isTrue(simLeft)) return new Val(false);
-        if (isTrue(simRight)) return new Val(false);
+        if (isTrue(left)) return new Val(false);
+        if (isTrue(right)) return new Val(false);
 
         // Step 4.5: x V F = ~(x) (and commutative)
         // If one side is False, it has no effect on the Or, so Nor just inverts the other side
-        if (isFalse(simLeft)) return new Not(simRight);
-        if (isFalse(simRight)) return new Not(simLeft);
+        if (isFalse(left)) return new Not(right);
+        if (isFalse(right)) return new Not(left);
 
         // Step 5: Fallback if no rules apply
-        return new Nor(simLeft, simRight);
+        return null;
     }
 }
