@@ -91,7 +91,7 @@ public abstract class BaseExpression implements Expression {
      */
     public Expression assignNot() {
         // By default, most objects just wrap themselves in a Not gate.
-        return new Not(this).simplify();
+        return new Not(this);
     }
 
 }
