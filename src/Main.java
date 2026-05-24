@@ -1,7 +1,15 @@
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Main class for demonstrating the boolean expression evaluation,
+ * variable extraction, NAND/NOR conversion, and simplification features.
+ */
 public class Main {
+    /**
+     * The main method to run the demonstration.
+     * @param args Command line arguments (not used).
+     */
     public static void main(String[] args) {
         System.out.println("==================================================");
         System.out.println("PHASE 1: BASIC EVALUATION & VARIABLE EXTRACTION");

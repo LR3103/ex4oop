@@ -1,25 +1,55 @@
-
+/**
+ * Represents a logical XOR (exclusive OR) expression.
+ * Extends BinaryExpression to handle two sub-expressions.
+ */
 public class Xor extends BinaryExpression {
 
+    /**
+     * Constructs an XOR expression with two given sub-expressions.
+     * @param left The left-hand side expression.
+     * @param right The right-hand side expression.
+     */
     public Xor(Expression left, Expression right) {
         super(left, right);
     }
 
+    /**
+     * Implements the logical XOR function.
+     * @param left The boolean value of the left expression.
+     * @param right The boolean value of the right expression.
+     * @return The result of the logical XOR operation.
+     */
     @Override
     protected boolean logicalFunction(boolean left, boolean right) {
         return left ^ right;
     }
 
+    /**
+     * Returns the string representation of the logical sign for XOR.
+     * @return The string "^".
+     */
     @Override
     public String getLogicalSign() {
         return "^";
     }
 
+    /**
+     * Reconstructs a new XOR expression with new left and right sub-expressions.
+     * Used primarily in assignment operations to maintain the expression tree structure.
+     * @param newLeft The new left-hand side expression.
+     * @param newRight The new right-hand side expression.
+     * @return A new Xor expression.
+     */
     @Override
     protected Expression reconstruct(Expression newLeft, Expression newRight) {
         return new Xor(newLeft, newRight);
     }
 
+    /**
+     * Converts the current XOR expression into an equivalent expression using only NAND operations.
+     * The formula for A XOR B using NAND is: (A NAND (A NAND B)) NAND (B NAND (A NAND B)).
+     * @return An expression tree representing the original XOR expression using only NAND gates.
+     */
     @Override
     public Expression nandify() {
         // 1. Compute child sub-trees exactly once
@@ -36,6 +66,11 @@ public class Xor extends BinaryExpression {
         );
     }
 
+    /**
+     * Converts the current XOR expression into an equivalent expression using only NOR operations.
+     * The formula for A XOR B using NOR is: NOR(NOR(A, B), NOR(NOR(A, A), NOR(B, B))).
+     * @return An expression tree representing the original XOR expression using only NOR gates.
+     */
     @Override
     public Expression norify() {
         // To match the assignment's exact string output, we put the
@@ -52,6 +87,15 @@ public class Xor extends BinaryExpression {
         );
     }
 
+    /**
+     * Simplifies the current XOR expression based on logical identities.
+     * Simplification rules include:
+     * - If both sub-expressions are constants, evaluate to a constant.
+     * - x ^ x = F
+     * - x ^ T = ~(x)
+     * - x ^ F = x
+     * @return A simplified version of the XOR expression.
+     */
     @Override
     public Expression simplify() {
         // Step 1: Simplify children first

@@ -1,42 +1,89 @@
+/**
+ * An abstract base class for unary boolean expressions (expressions with one operand).
+ * Extends BaseExpression and provides common functionality for single-operand operations.
+ */
 public abstract class UnaryExpression extends BaseExpression {
     private Expression expression;
 
     /**
-     * Constructor for UnaryExpression.
-     * @param expression the inner expression.
+     * Constructs a UnaryExpression with the given inner expression.
+     * @param expression The single sub-expression this unary operation acts upon.
      */
     public UnaryExpression(Expression expression) {
         this.expression = expression;
     }
 
+    /**
+     * Defines the specific logical function for the unary operation.
+     * Subclasses must implement this to define their behavior (e.g., NOT).
+     * @param val The boolean value of the inner expression.
+     * @return The result of applying the unary logical function.
+     */
     protected abstract boolean logicalFunction(boolean val);
 
+    /**
+     * Returns the inner expression of this unary operation.
+     * @return The sub-expression.
+     */
     public Expression getExpression() {
         return expression;
     }
 
+    /**
+     * Evaluates the unary expression using an empty assignment.
+     * @return The boolean result of the expression.
+     * @throws Exception If the inner expression contains variables.
+     */
     @Override
     public Boolean evaluate() throws Exception {
         return logicalFunction(this.expression.evaluate());
     }
 
+    /**
+     * Evaluates the unary expression using the provided variable assignment.
+     * @param assignment A map containing variable names and their boolean values.
+     * @return The boolean result of the expression.
+     * @throws Exception If a variable in the inner expression is not found in the assignment.
+     */
     @Override
     public Boolean evaluate(java.util.Map<String, Boolean> assignment) throws Exception {
         return logicalFunction(this.expression.evaluate(assignment));
     }
 
+    /**
+     * Returns a list of the unique variables present in the inner expression.
+     * @return A list of variable names.
+     */
     @Override
     public java.util.List<String> getVariables() {
         return this.expression.getVariables();
     }
 
+    /**
+     * Returns a string representation of the unary expression.
+     * The format is typically "(SIGN(expression))".
+     * @return A string representing the unary expression.
+     */
     @Override
     public String toString() {
         return "(" + this.getLogicalSign() + "(" + this.expression.toString() + ")" + ")";
     }
 
+    /**
+     * Reconstructs a new unary expression with a new inner expression.
+     * Used primarily in assignment operations to maintain the expression tree structure.
+     * @param expression The new inner expression.
+     * @return A new unary expression of the same type.
+     */
     protected abstract Expression reconstruct(Expression expression);
 
+    /**
+     * Returns a new expression in which all occurrences of the specified variable
+     * in the inner expression are replaced with the provided expression.
+     * @param var The name of the variable to replace.
+     * @param expression The expression to substitute.
+     * @return A new unary expression with the variable replaced in its inner part.
+     */
     @Override
     public Expression assign(String var, Expression expression) {
         return reconstruct(this.expression.assign(var, expression));

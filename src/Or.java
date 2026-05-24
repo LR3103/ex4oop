@@ -1,25 +1,55 @@
-
+/**
+ * Represents a logical OR expression.
+ * Extends BinaryExpression to handle two sub-expressions.
+ */
 public class Or extends BinaryExpression {
 
+    /**
+     * Constructs an OR expression with two given sub-expressions.
+     * @param left The left-hand side expression.
+     * @param right The right-hand side expression.
+     */
     public Or(Expression left, Expression right) {
         super(left, right);
     }
 
+    /**
+     * Implements the logical OR function.
+     * @param left The boolean value of the left expression.
+     * @param right The boolean value of the right expression.
+     * @return The result of the logical OR operation.
+     */
     @Override
     protected boolean logicalFunction(boolean left, boolean right) {
         return left || right;
     }
 
+    /**
+     * Returns the string representation of the logical sign for OR.
+     * @return The string "|".
+     */
     @Override
     public String getLogicalSign() {
         return "|";
     }
 
+    /**
+     * Reconstructs a new OR expression with new left and right sub-expressions.
+     * Used primarily in assignment operations to maintain the expression tree structure.
+     * @param newLeft The new left-hand side expression.
+     * @param newRight The new right-hand side expression.
+     * @return A new Or expression.
+     */
     @Override
     protected Expression reconstruct(Expression newLeft, Expression newRight) {
         return new Or(newLeft, newRight);
     }
 
+    /**
+     * Converts the current OR expression into an equivalent expression using only NAND operations.
+     * The formula for A OR B using NAND is: (NOT A) NAND (NOT B), which is ((A NAND A) NAND (B NAND B)).
+     * @return An expression tree representing the original OR expression using only NAND gates.
+     */
     @Override
     public Expression nandify() {
         // 1. Evaluate the sub-trees exactly once
@@ -33,6 +63,11 @@ public class Or extends BinaryExpression {
         );
     }
 
+    /**
+     * Converts the current OR expression into an equivalent expression using only NOR operations.
+     * The formula for A OR B using NOR is: NOT(A NOR B), which is (A NOR B) NOR (A NOR B).
+     * @return An expression tree representing the original OR expression using only NOR gates.
+     */
     @Override
     public Expression norify() {
         // Formula: NOT(NOR(A, B)) -> which matches your implementation
@@ -42,6 +77,15 @@ public class Or extends BinaryExpression {
         );
     }
 
+    /**
+     * Simplifies the current OR expression based on logical identities.
+     * Simplification rules include:
+     * - If both sub-expressions are constants, evaluate to a constant.
+     * - x | x = x
+     * - x | T = T
+     * - x | F = x
+     * @return A simplified version of the OR expression.
+     */
     @Override
     public Expression simplify() {
         // Step 1: Simplify children first

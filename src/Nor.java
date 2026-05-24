@@ -1,24 +1,55 @@
+/**
+ * Represents a logical NOR (NOT OR) expression.
+ * Extends BinaryExpression to handle two sub-expressions.
+ */
 public class Nor extends BinaryExpression {
 
+    /**
+     * Constructs a NOR expression with two given sub-expressions.
+     * @param left The left-hand side expression.
+     * @param right The right-hand side expression.
+     */
     public Nor(Expression left, Expression right) {
         super(left, right);
     }
 
+    /**
+     * Implements the logical NOR function.
+     * @param left The boolean value of the left expression.
+     * @param right The boolean value of the right expression.
+     * @return The result of the logical NOR operation.
+     */
     @Override
     protected boolean logicalFunction(boolean left, boolean right) {
         return !(left || right);
     }
 
+    /**
+     * Returns the string representation of the logical sign for NOR.
+     * @return The string "V".
+     */
     @Override
     public String getLogicalSign() {
         return "V";
     }
 
+    /**
+     * Reconstructs a new NOR expression with new left and right sub-expressions.
+     * Used primarily in assignment operations to maintain the expression tree structure.
+     * @param newLeft The new left-hand side expression.
+     * @param newRight The new right-hand side expression.
+     * @return A new Nor expression.
+     */
     @Override
     protected Expression reconstruct(Expression newLeft, Expression newRight) {
         return new Nor(newLeft, newRight);
     }
 
+    /**
+     * Converts the current NOR expression into an equivalent expression using only NAND operations.
+     * The formula for A NOR B using NAND is: (NOT A NAND NOT B) NAND (NOT A NAND NOT B).
+     * @return An expression tree representing the original NOR expression using only NAND gates.
+     */
     @Override
     public Expression nandify() {
         // 1. Compute the deep sub-trees exactly once
@@ -35,12 +66,26 @@ public class Nor extends BinaryExpression {
         return new Nand(innerNand, innerNand);
     }
 
+    /**
+     * Converts the current NOR expression into an equivalent expression using only NOR operations.
+     * Since it's already a NOR gate, it just recursively norifies its children.
+     * @return An expression tree representing the original NOR expression using only NOR gates.
+     */
     @Override
     public Expression norify() {
         // Already a NOR gate, just recursively process the children
         return new Nor(this.getLeft().norify(), this.getRight().norify());
     }
 
+    /**
+     * Simplifies the current NOR expression based on logical identities.
+     * Simplification rules include:
+     * - If both sub-expressions are constants, evaluate to a constant.
+     * - x V x = ~(x)
+     * - x V T = F
+     * - x V F = ~(x)
+     * @return A simplified version of the NOR expression.
+     */
     @Override
     public Expression simplify() {
         // Step 1: Simplify children first
