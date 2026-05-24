@@ -101,8 +101,8 @@ public class Nor extends BinaryExpression {
 
         // Step 4.5: x V F = ~(x) (and commutative)
         // If one side is False, it has no effect on the Or, so Nor just inverts the other side
-        if (isFalse(left)) return new Not(right);
-        if (isFalse(right)) return new Not(left);
+        if (isFalse(left)) return right.assignNot();
+        if (isFalse(right)) return left.assignNot();
 
         // Step 5: Fallback if no rules apply
         return null;

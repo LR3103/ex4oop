@@ -106,8 +106,8 @@ public class Xor extends BinaryExpression {
 
         // Step 4: x ^ T = ~(x) (and commutative)
         // If one side is True, return the NOT of the other side
-        if (isTrue(left)) return new Not(right);
-        if (isTrue(right)) return new Not(left);
+        if (isTrue(left)) return right.assignNot();
+        if (isTrue(right)) return left.assignNot();
 
         // Step 4.5: x ^ F = x (and commutative)
         // If one side is False, just return the other side exactly as is

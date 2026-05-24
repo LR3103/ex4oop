@@ -86,12 +86,12 @@ public class Nand extends BinaryExpression {
     public Expression simplifierLogic(Expression left, Expression right) {
         // Step 3: x A x = ~(x)
         if (left.toString().equals(right.toString())) {
-            return new Not(left).simplify(); // Add .simplify() here!
+            return left.assignNot();
         }
 
         // Step 4: x A T = ~(x)
-        if (isTrue(left)) return new Not(right).simplify(); // And here!
-        if (isTrue(right)) return new Not(left).simplify(); // And here!
+        if (isTrue(left)) return right.assignNot();
+        if (isTrue(right)) return left.assignNot();
 
         // Step 4.5: x A F = T (and commutative)
         // If ANY side is False, an And would be False, so a Nand is ALWAYS True
