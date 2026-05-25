@@ -2,7 +2,7 @@
  * Represents a constant boolean value (True or False).
  * Implements the Expression interface.
  */
-public class Val implements Expression{
+public class Val implements Expression {
     private boolean value;
 
     /**
@@ -17,7 +17,7 @@ public class Val implements Expression{
      * Copy constructor for Val.
      * @param val The Val object to copy.
      */
-    public Val(Val val){
+    public Val(Val val) {
         this.value = val.value;
     }
 
@@ -97,7 +97,7 @@ public class Val implements Expression{
      * @return The current Val instance.
      */
     @Override
-    public Expression simplify(){
+    public Expression simplify() {
         return new Val(this);
     }
 
@@ -105,7 +105,7 @@ public class Val implements Expression{
      * Returns a new Not expression wrapping this constant value.
      * @return A new Not expression.
      */
-    public Expression assignNot(){
+    public Expression assignNot() {
         return new Not(this);
     }
 

@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Represents a logical NOR (NOT OR) expression.
  * Extends BinaryExpression to handle two sub-expressions.
@@ -84,7 +86,9 @@ public class Nor extends BinaryExpression {
      * - x V x = ~(x)
      * - x V T = F
      * - x V F = ~(x)
-     * @return A simplified version of the NOR expression.
+     * @param left The simplified left sub-expression.
+     * @param right The simplified right sub-expression.
+     * @return A simplified expression if a rule applies, otherwise null.
      */
     @Override
     public Expression simplifierLogic(Expression left, Expression right) {
@@ -96,15 +100,62 @@ public class Nor extends BinaryExpression {
 
         // Step 4: x V T = F (and commutative)
         // If ANY side is True, an Or would be True, so a Nor is ALWAYS False
-        if (isTrue(left)) return new Val(false);
-        if (isTrue(right)) return new Val(false);
+        if (isTrue(left)) {
+            return new Val(false);
+        }
+        if (isTrue(right)) {
+            return new Val(false);
+        }
 
         // Step 4.5: x V F = ~(x) (and commutative)
         // If one side is False, it has no effect on the Or, so Nor just inverts the other side
-        if (isFalse(left)) return right.assignNot();
-        if (isFalse(right)) return left.assignNot();
+        if (isFalse(left)) {
+            return right.assignNot();
+        }
+        if (isFalse(right)) {
+            return left.assignNot();
+        }
 
         // Step 5: Fallback if no rules apply
         return null;
+    }
+
+    /**
+     * Simplifies the current NOR expression by recursively simplifying its sub-expressions
+     * and applying specific NOR simplification rules.
+     * @return A simplified version of the NOR expression.
+     */
+    @Override
+    public Expression simplify() {
+        return super.simplify();
+    }
+
+    /**
+     * Applies a NOT operation to this NOR expression.
+     * By default, it wraps the current expression in a new Not gate.
+     * @return A new Not expression wrapping this instance.
+     */
+    @Override
+    public Expression assignNot() {
+        return super.assignNot();
+    }
+
+    /**
+     * Returns a string representation of the NOR expression.
+     * The format is typically "(left_expression V right_expression)".
+     * @return A string representing the NOR expression.
+     */
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    /**
+     * Returns a list of the unique variables present in this NOR expression.
+     * @return A list of variable names.
+     */
+    @Override
+    public List<String> getVariables() {
+        return super.getVariables();
     }
 }

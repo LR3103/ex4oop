@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.Map;
+
 /**
  * An abstract base class for unary boolean expressions (expressions with one operand).
  * Extends BaseExpression and provides common functionality for single-operand operations.
@@ -46,7 +49,7 @@ public abstract class UnaryExpression extends BaseExpression {
      * @throws Exception If a variable in the inner expression is not found in the assignment.
      */
     @Override
-    public Boolean evaluate(java.util.Map<String, Boolean> assignment) throws Exception {
+    public Boolean evaluate(Map<String, Boolean> assignment) throws Exception {
         return logicalFunction(this.expression.evaluate(assignment));
     }
 
@@ -55,7 +58,7 @@ public abstract class UnaryExpression extends BaseExpression {
      * @return A list of variable names.
      */
     @Override
-    public java.util.List<String> getVariables() {
+    public List<String> getVariables() {
         return this.expression.getVariables();
     }
 
@@ -86,7 +89,7 @@ public abstract class UnaryExpression extends BaseExpression {
      * @return A simplified expression if a rule applies, otherwise null.
      */
     @Override
-    public Expression simplifierLogic(Expression expression){
+    public Expression simplifierLogic(Expression expression) {
         return null;
     }
 
@@ -126,4 +129,13 @@ public abstract class UnaryExpression extends BaseExpression {
         return reconstruct(this.expression.assign(var, expression));
     }
 
+    /**
+     * Applies a NOT operation to this unary expression.
+     * By default, it wraps the current expression in a new Not gate.
+     * @return A new Not expression wrapping this instance.
+     */
+    @Override
+    public Expression assignNot() {
+        return super.assignNot();
+    }
 }

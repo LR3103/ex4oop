@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Represents a logical NOT expression.
  * Extends UnaryExpression to handle a single sub-expression.
@@ -87,6 +89,7 @@ public class Not extends UnaryExpression {
      * Simplification rules include:
      * - If the sub-expression is a constant, evaluate to a constant.
      * - ~(~X) = X (handled polymorphically by assignNot()).
+     * @param expression The simplified sub-expression.
      * @return A simplified version of the NOT expression.
      */
     @Override
@@ -96,5 +99,24 @@ public class Not extends UnaryExpression {
         // If it's a Var/And/Or, it returns new Not(simChild).
         // If it is ALREADY a Not gate, it cancels out and returns its inner child!
         return expression.assignNot();
+    }
+
+    /**
+     * Returns a string representation of the NOT expression.
+     * The format is typically "~(expression)".
+     * @return A string representing the NOT expression.
+     */
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    /**
+     * Returns a list of the unique variables present in this NOT expression.
+     * @return A list of variable names.
+     */
+    @Override
+    public List<String> getVariables() {
+        return super.getVariables();
     }
 }

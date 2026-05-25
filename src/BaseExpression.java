@@ -1,7 +1,3 @@
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 /**
  * An abstract base class that provides common functionality for all boolean expressions.
  * Implements the Expression interface and offers helper methods for simplification.
@@ -25,7 +21,9 @@ public abstract class BaseExpression implements Expression {
      */
     protected boolean isTrue(Expression e) {
         // If it has variables, it definitely isn't a constant True
-        if (!e.getVariables().isEmpty()) return false;
+        if (!e.getVariables().isEmpty()) {
+            return false;
+        }
 
         try {
             return e.evaluate(); // Only evaluates if it's purely constants
@@ -45,7 +43,9 @@ public abstract class BaseExpression implements Expression {
      * @return true if the expression evaluates to false, false otherwise.
      */
     protected boolean isFalse(Expression e) {
-        if (!e.getVariables().isEmpty()) return false;
+        if (!e.getVariables().isEmpty()) {
+            return false;
+        }
 
         try {
             return !e.evaluate();
@@ -65,7 +65,7 @@ public abstract class BaseExpression implements Expression {
      * @param right The simplified right sub-expression (for binary expressions).
      * @return A simplified expression if a rule applies, otherwise null.
      */
-    public Expression simplifierLogic(Expression left, Expression right){
+    public Expression simplifierLogic(Expression left, Expression right) {
         return null;
     }
 
@@ -77,7 +77,7 @@ public abstract class BaseExpression implements Expression {
      * @param expression The simplified sub-expression (for unary expressions).
      * @return A simplified expression if a rule applies, otherwise null.
      */
-    public Expression simplifierLogic(Expression expression){
+    public Expression simplifierLogic(Expression expression) {
         return null;
     }
 

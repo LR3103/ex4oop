@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Represents a logical OR expression.
  * Extends BinaryExpression to handle two sub-expressions.
@@ -78,9 +80,9 @@ public class Or extends BinaryExpression {
     }
 
     /**
-     * Applies specific simplification rules for the OR expression.
-     * This method is part of the Template Method pattern for simplification.
+     * Simplifies the current OR expression based on logical identities.
      * Simplification rules include:
+     * - If both sub-expressions are constants, evaluate to a constant.
      * - x | x = x
      * - x | T = T
      * - x | F = x
@@ -96,14 +98,61 @@ public class Or extends BinaryExpression {
         }
 
         // Step 4: x | T = T (and commutative)
-        if (isTrue(left)) return new Val(true);
-        if (isTrue(right)) return new Val(true);
+        if (isTrue(left)) {
+            return new Val(true);
+        }
+        if (isTrue(right)) {
+            return new Val(true);
+        }
 
         // Step 4.5: x | F = x (and commutative)
-        if (isFalse(left)) return right;
-        if (isFalse(right)) return left;
+        if (isFalse(left)) {
+            return right;
+        }
+        if (isFalse(right)) {
+            return left;
+        }
 
         // Step 5: Fallback if no rules apply
         return null;
+    }
+
+    /**
+     * Simplifies the current OR expression by recursively simplifying its sub-expressions
+     * and applying specific OR simplification rules.
+     * @return A simplified version of the OR expression.
+     */
+    @Override
+    public Expression simplify() {
+        return super.simplify();
+    }
+
+    /**
+     * Applies a NOT operation to this OR expression.
+     * By default, it wraps the current expression in a new Not gate.
+     * @return A new Not expression wrapping this instance.
+     */
+    @Override
+    public Expression assignNot() {
+        return super.assignNot();
+    }
+
+    /**
+     * Returns a string representation of the OR expression.
+     * The format is typically "(left_expression | right_expression)".
+     * @return A string representing the OR expression.
+     */
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    /**
+     * Returns a list of the unique variables present in this OR expression.
+     * @return A list of variable names.
+     */
+    @Override
+    public List<String> getVariables() {
+        return super.getVariables();
     }
 }

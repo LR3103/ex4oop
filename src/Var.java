@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.Map;
+
 /**
  * Represents a variable in a boolean expression.
  * Implements the Expression interface.
@@ -20,7 +23,7 @@ public class Var implements Expression {
      * @throws Exception If the variable's name is not found in the assignment.
      */
     @Override
-    public Boolean evaluate(java.util.Map<String, Boolean> assignment) throws Exception {
+    public Boolean evaluate(Map<String, Boolean> assignment) throws Exception {
         if (assignment.containsKey(this.name)) {
             return assignment.get(this.name);
         }
@@ -35,7 +38,7 @@ public class Var implements Expression {
      */
     @Override
     public Boolean evaluate() throws Exception {
-        throw new Exception("Evaluate was called with no assignment's variable for" + this.name +".");
+        throw new Exception("Evaluate was called with no assignment's variable for" + this.name + ".");
     }
 
     /**
@@ -43,7 +46,7 @@ public class Var implements Expression {
      * @return A list with one string, the variable's name.
      */
     @Override
-    public java.util.List<String> getVariables() {
+    public List<String> getVariables() {
         java.util.List<String> list = new java.util.ArrayList<>();
         list.add(this.name);
         return list;
@@ -106,7 +109,7 @@ public class Var implements Expression {
      * Returns a new Not expression wrapping this variable.
      * @return A new Not expression.
      */
-    public Expression assignNot(){
+    public Expression assignNot() {
         return new Not(this);
     }
 

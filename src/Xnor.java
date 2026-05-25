@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Represents a logical XNOR (exclusive NOR) expression.
  * Extends BinaryExpression to handle two sub-expressions.
@@ -96,7 +98,9 @@ public class Xnor extends BinaryExpression {
      * - If both sub-expressions are constants, evaluate to a constant.
      * - x # x = T
      * Note: Rules for x # T and x # F are not implemented as per assignment.
-     * @return A simplified version of the XNOR expression.
+     * @param left The simplified left sub-expression.
+     * @param right The simplified right sub-expression.
+     * @return A simplified expression if a rule applies, otherwise null.
      */
     @Override
     public Expression simplifierLogic(Expression left, Expression right) {
@@ -107,6 +111,45 @@ public class Xnor extends BinaryExpression {
         }
 
         return null;
+    }
+
+    /**
+     * Simplifies the current XNOR expression by recursively simplifying its sub-expressions
+     * and applying specific XNOR simplification rules.
+     * @return A simplified version of the XNOR expression.
+     */
+    @Override
+    public Expression simplify() {
+        return super.simplify();
+    }
+
+    /**
+     * Applies a NOT operation to this XNOR expression.
+     * By default, it wraps the current expression in a new Not gate.
+     * @return A new Not expression wrapping this instance.
+     */
+    @Override
+    public Expression assignNot() {
+        return super.assignNot();
+    }
+
+    /**
+     * Returns a string representation of the XNOR expression.
+     * The format is typically "(left_expression # right_expression)".
+     * @return A string representing the XNOR expression.
+     */
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    /**
+     * Returns a list of the unique variables present in this XNOR expression.
+     * @return A list of variable names.
+     */
+    @Override
+    public List<String> getVariables() {
+        return super.getVariables();
     }
 
 }

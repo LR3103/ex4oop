@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Represents a logical NAND (NOT AND) expression.
  * Extends BinaryExpression to handle two sub-expressions.
@@ -80,7 +82,9 @@ public class Nand extends BinaryExpression {
      * - x A x = ~(x)
      * - x A T = ~(x)
      * - x A F = T
-     * @return A simplified version of the NAND expression.
+     * @param left The simplified left sub-expression.
+     * @param right The simplified right sub-expression.
+     * @return A simplified expression if a rule applies, otherwise null.
      */
     @Override
     public Expression simplifierLogic(Expression left, Expression right) {
@@ -90,15 +94,62 @@ public class Nand extends BinaryExpression {
         }
 
         // Step 4: x A T = ~(x)
-        if (isTrue(left)) return right.assignNot();
-        if (isTrue(right)) return left.assignNot();
+        if (isTrue(left)) {
+            return right.assignNot();
+        }
+        if (isTrue(right)) {
+            return left.assignNot();
+        }
 
         // Step 4.5: x A F = T (and commutative)
         // If ANY side is False, an And would be False, so a Nand is ALWAYS True
-        if (isFalse(left)) return new Val(true);
-        if (isFalse(right)) return new Val(true);
+        if (isFalse(left)) {
+            return new Val(true);
+        }
+        if (isFalse(right)) {
+            return new Val(true);
+        }
 
         // Step 5: Fallback if no rules apply
         return null;
+    }
+
+    /**
+     * Simplifies the current NAND expression by recursively simplifying its sub-expressions
+     * and applying specific NAND simplification rules.
+     * @return A simplified version of the NAND expression.
+     */
+    @Override
+    public Expression simplify() {
+        return super.simplify();
+    }
+
+    /**
+     * Applies a NOT operation to this NAND expression.
+     * By default, it wraps the current expression in a new Not gate.
+     * @return A new Not expression wrapping this instance.
+     */
+    @Override
+    public Expression assignNot() {
+        return super.assignNot();
+    }
+
+    /**
+     * Returns a string representation of the NAND expression.
+     * The format is typically "(left_expression A right_expression)".
+     * @return A string representing the NAND expression.
+     */
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    /**
+     * Returns a list of the unique variables present in this NAND expression.
+     * @return A list of variable names.
+     */
+    @Override
+    public List<String> getVariables() {
+        return super.getVariables();
     }
 }

@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Represents a logical XOR (exclusive OR) expression.
  * Extends BinaryExpression to handle two sub-expressions.
@@ -97,7 +99,7 @@ public class Xor extends BinaryExpression {
      * @return A simplified version of the XOR expression.
      */
     @Override
-    public Expression simplifierLogic(Expression left, Expression right){
+    public Expression simplifierLogic(Expression left, Expression right) {
         // Step 3: x ^ x = F
         // If the two sides are identical, Xor always returns False
         if (left.toString().equals(right.toString())) {
@@ -106,20 +108,62 @@ public class Xor extends BinaryExpression {
 
         // Step 4: x ^ T = ~(x) (and commutative)
         // If one side is True, return the NOT of the other side
-        if (isTrue(left)) return right.assignNot();
-        if (isTrue(right)) return left.assignNot();
+        if (isTrue(left)) {
+            return right.assignNot();
+        }
+        if (isTrue(right)) {
+            return left.assignNot();
+        }
 
         // Step 4.5: x ^ F = x (and commutative)
         // If one side is False, just return the other side exactly as is
-        if (isFalse(left)) return right;
-        if (isFalse(right)) return left;
+        if (isFalse(left)) {
+            return right;
+        }
+        if (isFalse(right)) {
+            return left;
+        }
 
         //fallback logic super methods returns the exact same method
         return null;
     }
 
+    /**
+     * Simplifies the current XOR expression by recursively simplifying its sub-expressions
+     * and applying specific XOR simplification rules.
+     * @return A simplified version of the XOR expression.
+     */
+    @Override
+    public Expression simplify() {
+        return super.simplify();
+    }
 
+    /**
+     * Applies a NOT operation to this XOR expression.
+     * By default, it wraps the current expression in a new Not gate.
+     * @return A new Not expression wrapping this instance.
+     */
+    @Override
+    public Expression assignNot() {
+        return super.assignNot();
+    }
 
+    /**
+     * Returns a string representation of the XOR expression.
+     * The format is typically "(left_expression ^ right_expression)".
+     * @return A string representing the XOR expression.
+     */
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 
-
+    /**
+     * Returns a list of the unique variables present in this XOR expression.
+     * @return A list of variable names.
+     */
+    @Override
+    public List<String> getVariables() {
+        return super.getVariables();
+    }
 }

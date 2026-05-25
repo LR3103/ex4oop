@@ -1,11 +1,10 @@
-import java.util.List;
 import java.util.Map;
 
 /**
  * An abstract base class for binary boolean expressions (expressions with two operands).
  * Extends BaseExpression and provides common functionality for two-operand logical operations.
  */
-public abstract class BinaryExpression extends BaseExpression{
+public abstract class BinaryExpression extends BaseExpression {
     private Expression left;
     private Expression right;
 
@@ -101,7 +100,7 @@ public abstract class BinaryExpression extends BaseExpression{
      * @return A simplified expression if a rule applies, otherwise null.
      */
     @Override
-    public Expression simplifierLogic(Expression left, Expression right){
+    public Expression simplifierLogic(Expression left, Expression right) {
         return null;
     }
 
@@ -150,5 +149,15 @@ public abstract class BinaryExpression extends BaseExpression{
     @Override
     public Expression assign(String var, Expression expression) {
         return reconstruct(this.left.assign(var, expression), this.right.assign(var, expression));
+    }
+
+    /**
+     * Applies a NOT operation to this binary expression.
+     * By default, it wraps the current expression in a new Not gate.
+     * @return A new Not expression wrapping this instance.
+     */
+    @Override
+    public Expression assignNot() {
+        return super.assignNot();
     }
 }
